@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Pusher Test</title>
+  <script src="https://js.pusher.com/3.0/pusher.min.js"></script>
+  <script>
+    // Enable pusher logging - don't include this in production
+    Pusher.log = function(message) {
+      if (window.console && window.console.log) {
+        window.console.log(message);
+      }
+    };
+
+    var pusher = new Pusher('33b3b7362dac16459737', {
+      cluster: 'ap1',
+      encrypted: true
+    });
+
+    <% for(var i=0; i<ctrldata.length; i++) { %>
+
+    var <%=ctrldata[i].currency %> = pusher.subscribe('<%=ctrldata[i].currency %>');
+    <%=ctrldata[i].currency %>.bind('my_event', function(data) {
+      document.getElementById('<%=ctrldata[i].currency %>').innerHTML = data.currency + " : "+data.value;
+    });
+
+    <% } %>
+  </script>
+</head>
+<body>
+  <h2>Pusher test page</h2>
+  <% for(i=0; i<ctrldata.length; i++) { %>
+  <div id='<%=ctrldata[i].currency %>'></div>
+  <% } %>
+</body>
+</html>
